@@ -59,6 +59,11 @@ Calibration and catalogue:
     python -m rochespec.surveys.compare
     python -m rochespec.catalog                         # catalog/cb_feh_v0.csv
 
+## Catalogue
+
+`catalog/cb_feh_v0.csv`: 9,525 ASAS-SN contact binaries, 7,111 with a calibrated [Fe/H] (`feh_all`), fitted with the standard
+fill-out (2026-10-29).
+
 ## Layout
 
 - `roche.py`: Roche mesh, surface gravity and temperature, visibility and velocities, intensity grids and disk integration
@@ -69,5 +74,5 @@ Calibration and catalogue:
 - `wingrid.py`, `surveys/`: windowed FFT engine and the MRS, GALAH and DESI modules
 - `calib_lrs.py`, `calib_apogee.py`, `calib_fit.py`, `apo_tphot.py`, `post.py`: calibration and zero points
 - `catalog.py`: the combined catalogue
-- `fine_joint.py`: optional cubic-spline interpolation of the chi^2 grid in Teff
+- `fine_joint.py`: optional cubic-spline interpolation of the chi^2 grid in Teff (`CB_FINE=1`)
 - `tools/`: payne-zero intensity grid generation (needs a payne-zero checkout, `PZ_ROOT`)

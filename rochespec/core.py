@@ -110,3 +110,11 @@ def teff_grid_for(Tp, sig, lo=4800, hi=6700, step=100):
         j = int(np.argmin(np.abs(np.arange(lo, hi + 1, step) - Tp))); full = np.arange(lo, hi + 1, step)
         g = full[max(0, min(j - 2, len(full) - 5)): max(0, min(j - 2, len(full) - 5)) + 5]
     return g
+
+
+# CB_FINE=1: interpolate each chi^2 grid in Teff with a cubic spline (10 K steps) before profiling (fine_joint.py).
+# Variant only; the catalogue leaves it unset. Modules that do "from .core import joint" pick it up at import time.
+import os as _os
+if _os.environ.get("CB_FINE"):
+    from .fine_joint import make as _make_fine
+    joint = _make_fine(joint)
