@@ -246,15 +246,16 @@ class RocheStar:
         key = round(float(ph), 4)
         if key not in self.cache:
             los, mu, vis = self.cb.view(key, self.inc)
-            self.cache[key] = (vis, mu[vis], self.cb.rv(los, 1.0, 1.0)[vis])     # rv for a=1 Rsun, P=1 d; scales as a/P
+            # rv for a=1 Rsun, P=1 d (scales as a/P); dA stored per phase (PHOEBE meshes: area x visible fraction of that phase)
+            self.cache[key] = (vis, mu[vis], self.cb.rv(los, 1.0, 1.0)[vis], self.cb.dA[vis].copy())
         return self.cache[key]
 
     def elements(self, T, phases, wts):
         M1 = (T / 5772.0) ** 1.8; A = (M1 * (1 + self.q) * (self.P / 365.25) ** 2) ** (1 / 3) * 215.03
         logg, Tl = self.cb.surface(M1, A, T); el = [], [], [], [], []
         for p, wt in zip(phases, wts):
-            vis, mu, rv1 = self.view(p)
-            for lst, val in zip(el, (Tl[vis], logg[vis], mu, rv1 * A / self.P, self.cb.dA[vis] * wt)): lst.append(val)
+            vis, mu, rv1, dA = self.view(p)
+            for lst, val in zip(el, (Tl[vis], logg[vis], mu, rv1 * A / self.P, dA * wt)): lst.append(val)
         return [np.concatenate(x) for x in el]
 
 
@@ -281,6 +282,8 @@ def fit_ew(grid, star, specs, tc, sigma_kms, mh_fine, lsf_apply=None, gam_range=
     tg = tg[(tg >= grid.TEFFS[0]) & (tg <= grid.TEFFS[-1])]
     basis = [legendre_basis(s.wl, s.meta["segs"], s.meta["deg"]) for s in specs]
     phs = [(s.ph, s.t_w) for s in specs]
+    if hasattr(star.cb, "prepare"):     # PHOEBE geometry: exact phases (as RocheStar.view rounds them), library if there are many
+        star.cb.prepare(np.round(np.concatenate([np.atleast_1d(p) for p, _ in phs]), 4), star.inc)
 
     def mods_at(T):
         return [grid.integrate(*star.elements(T, ph, wt), sigma_kms=sigma_kms) for ph, wt in phs]

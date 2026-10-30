@@ -80,6 +80,8 @@ def fit_star(s, obs_s, grid, cb_cache={}):
     eph = "VEB" if veb_ok(s) else "nuisance"
     for sp in specs:
         sp["ph"] = bjd_phase(sp["bjd"], s) if eph == "VEB" else ((sp["bjd"] - sp["bjd"][0]) / P) % 1
+    if hasattr(cb, "prepare"):     # PHOEBE geometry (CB_GEOM=phoebe): exact phases with a VEB ephemeris, else the shared phase library
+        cb.prepare(np.concatenate([sp["ph"] for sp in specs]), inc, exact=(eph == "VEB"))
     Tp_m02 = s.Tphot0 - 0.2 * s.dTdfeh
     sigT = s.sig_Tphot if np.isfinite(s.sig_Tphot) else 1e4
     tg = teff_grid_for(Tp_m02 if np.isfinite(Tp_m02) else 5800, sigT)

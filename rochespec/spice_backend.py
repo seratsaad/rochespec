@@ -116,6 +116,11 @@ class KernelIntegrator:
         out = irfft(acc, self.N, axis=-1)[..., self.off:self.off + self.n]
         return out[:, 0], out[:, 1]
 
+    def warm_all(self):
+        """fill the node-FFT cache for every grid node (do this before forking workers so they share it)"""
+        for node in np.ndindex(*self.shape[:-1]):
+            self._node_fft(node)
+
     def from_spice(self, models, index=None):
         e = elements(models, index)
         return self.spectrum(self.weights(e["T"], e["logg"], e["mh"], e["mu"], e["v"], e["w"]))

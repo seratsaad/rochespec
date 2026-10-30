@@ -32,6 +32,13 @@ def lagrange(q):
 
 
 class ContactBinary:
+    def __new__(cls, *args, **kw):
+        # CB_GEOM=phoebe: PHOEBE contact meshes (phoebe_geom.PhoebeContact, same interface); default: this ray-traced Roche surface
+        if cls is ContactBinary and os.environ.get("CB_GEOM", "roche") == "phoebe":
+            from .phoebe_geom import PhoebeContact
+            return PhoebeContact(*args, **kw)
+        return super().__new__(cls)
+
     def __init__(self, q, fillout, ntheta=90, nphi=180, outer=None):
         self.q, self.f = q, fillout
         self.xl1, self.xl2, self.xl3 = lagrange(q)
@@ -143,6 +150,13 @@ class IntensityGrid:
 
     def integrate_nodes(self, T, logg, mu, v, dA, vmax=600, lsf_R=1800.0):
         """F, Fc for every [M/H] node at once: arrays (n_mh, n_lnw); elements from several views may be stacked"""
+        if os.environ.get("CB_KERNEL", "direct") == "fft":
+            # spice_backend.KernelIntegrator: node FFTs cached, one FFT product per occupied node (same result to ~1e-7)
+            ki = self.__dict__.setdefault("_ki", {})
+            if (vmax, lsf_R) not in ki:
+                from .spice_backend import KernelIntegrator
+                ki[(vmax, lsf_R)] = KernelIntegrator(self, vmax=vmax, lsf_R=lsf_R)
+            return ki[(vmax, lsf_R)].spectrum_all_mh(T, logg, mu, v, dA * mu)
         K = int(vmax / self.dv); nT, ng, nm = len(self.teffs), len(self.loggs), len(self.mu)
         W = np.zeros((nT, ng, nm, 2 * K + 1))
         jt, wt = self._lin(self.teffs, T); jg, wg = self._lin(self.loggs, logg); jm, wm = self._lin(self.mu, mu)

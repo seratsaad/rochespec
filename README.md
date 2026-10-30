@@ -33,6 +33,11 @@ Set `ROCHESPEC_DATA` to the data root (default `~/rochespec_data`). The modules 
 `ROCHESPEC_A4B` points to a checkout of the agent4binary repository, whose DR19 census manifest lists the APOGEE single
 dwarfs used as calibrators.
 
+Geometry: `CB_GEOM=phoebe` builds the surface from PHOEBE contact meshes (`phoebe_geom.py`; meshes per (q, f, i) in units of the
+separation, exact phases or a 60-phase library cached in `$ROCHESPEC_DATA/phoebe_lib/`; falls back to the ray-traced Roche surface if
+PHOEBE cannot mesh a geometry). The default is the ray-traced surface of `roche.py`. `CB_KERNEL=fft` uses the FFT kernel integrator
+for the disk integral. The catalogue uses both.
+
 The fill-out factor uses the standard L2 outer potential (as in PHOEBE and Wilson-Devinney). `CB_OUTER=min` gives the
 definition of the first catalogue release, which used the L3 potential.
 
@@ -61,8 +66,8 @@ Calibration and catalogue:
 
 ## Catalogue
 
-`catalog/cb_feh_v0.csv`: 9,525 ASAS-SN contact binaries, 7,111 with a calibrated [Fe/H] (`feh_all`), fitted with the standard
-fill-out (2026-10-29).
+`catalog/cb_feh_v0.csv`: 9,525 ASAS-SN contact binaries, 7,113 with a calibrated [Fe/H] (`feh_all`), fitted with PHOEBE contact
+meshes, the standard fill-out and the FFT kernel (`CB_GEOM=phoebe CB_KERNEL=fft`, 2026-10-30).
 
 ## SPICE surfaces
 
@@ -74,6 +79,7 @@ it reproduces SPICE's `simulate_observed_flux` to 1e-8 in F/Fc and is 150-400 ti
 
 ## Layout
 
+- `phoebe_geom.py`: PHOEBE contact meshes as the fitter geometry
 - `roche.py`: Roche mesh, surface gravity and temperature, visibility and velocities, intensity grids and disk integration
 - `model_cfg.py`: grid nodes and loading
 - `core.py`: joint (Teff, [M/H]) inference with the photometric prior, LAMOST DR10 reader, ephemerides, geometry

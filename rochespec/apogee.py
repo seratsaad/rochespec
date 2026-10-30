@@ -84,6 +84,8 @@ def fit_star(s, grid):
         w = np.where(np.isfinite(o) & (iv > 0), 1 / (1 / np.maximum(iv, 1e-30) + FLOOR ** 2), 0.0)
         bjd = visit_bjd(v, s.RAJ2000, s.DEJ2000)
         obs.append(dict(o=o, w=w, ph=bjd_phase(bjd, s) if eph == "VEB" else ((bjd - bjd[0]) / P) % 1, snr=v["snr"]))
+    if hasattr(cb, "prepare"):     # PHOEBE geometry (CB_GEOM=phoebe): exact phases with a VEB ephemeris, else the shared phase library
+        cb.prepare(np.concatenate([ob["ph"] for ob in obs]), inc, exact=(eph == "VEB"))
     Tp_m02 = s.Tphot0 - 0.2 * s.dTdfeh; sigT = s.sig_Tphot if np.isfinite(s.sig_Tphot) else 1e4
     tg = teff_grid_for(Tp_m02 if np.isfinite(Tp_m02) else 5800, sigT)
     lnw = grid.lnw
