@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use rochespec, please cite it as below, together with Payne Zero and SPICE (see README)."
+title: "rochespec: Roche-model metallicities for contact binaries from survey spectra"
+type: software
+authors:
+  - family-names: Saad
+    given-names: Serat M.
+    orcid: "https://orcid.org/0009-0004-9592-2311"
+    affiliation: "Department of Astronomy, The Ohio State University"
+version: 0.2.0
+license: MIT
+repository-code: "https://github.com/seratsaad/rochespec"
+keywords:
+  - contact binaries
+  - W UMa stars
+  - stellar spectroscopy
+  - metallicity

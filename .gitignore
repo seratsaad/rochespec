@@ -4,3 +4,5 @@ __pycache__/
 .build_from_scratch.py
 logs/
 *.npz
+examples/*.png
+.pytest_cache/

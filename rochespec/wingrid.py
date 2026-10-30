@@ -7,7 +7,11 @@ Roche geometry comes from ../cbsynth/roche.py (read-only import); node lists fro
 """
 from .config import DATA
 import os, sys, glob, time
-import numpy as np, pandas as pd
+import numpy as np
+try:
+    import pandas as pd
+except ImportError:      # pandas is needed only by the batch pipelines
+    pd = None
 from scipy.fft import rfft, irfft, next_fast_len
 from astropy.time import Time
 from astropy.coordinates import SkyCoord, EarthLocation

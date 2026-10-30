@@ -2,7 +2,11 @@
 LAMOST DR10 spectrum reader with correct exposure times, ephemerides and geometry."""
 from .config import DATA
 import sys, re
-import numpy as np, pandas as pd
+import numpy as np
+try:
+    import pandas as pd
+except ImportError:      # pandas is needed only by the batch pipelines
+    pd = None
 from astropy.io import fits
 from astropy.table import Table
 

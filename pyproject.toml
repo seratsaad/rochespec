@@ -4,15 +4,30 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rochespec"
-version = "0.1.0"
-description = "Roche-model metallicities for contact binaries from large spectroscopic surveys"
+version = "0.2.0"
+description = "Roche-model metallicities for contact binaries from survey spectra"
+readme = "README.md"
+license = { text = "MIT" }
 authors = [{ name = "Serat M. Saad" }]
 requires-python = ">=3.10"
-license = { text = "MIT" }
-dependencies = ["numpy", "scipy", "pandas", "astropy", "requests", "matplotlib"]
+dependencies = ["numpy", "scipy", "astropy"]
 
 [project.optional-dependencies]
-spice = ["jax", "stellar-spice", "phoebe"]
+phoebe = ["phoebe>=2.5"]
+spice = ["jax", "stellar-spice"]
+plot = ["matplotlib"]
+pipelines = ["pandas", "requests", "matplotlib", "astroquery", "dustmaps"]
+test = ["pytest"]
+all = ["phoebe>=2.5", "jax", "stellar-spice", "matplotlib", "pandas", "requests", "astroquery", "dustmaps", "pytest"]
+
+[project.scripts]
+rochespec = "rochespec.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/seratsaad/rochespec"
 
 [tool.setuptools.packages.find]
 include = ["rochespec*"]
+
+[tool.setuptools.package-data]
+rochespec = ["data/*"]
