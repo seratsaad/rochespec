@@ -1,0 +1,22 @@
+{
+ "T0": 5800,
+ "Tscale": 1000,
+ "terms": [
+  "1",
+  "T",
+  "M"
+ ],
+ "coef": [
+  -0.176891978302532,
+  -0.19236066760137788,
+  -0.1072082682487493
+ ],
+ "bic": -362.77231348525527,
+ "n_used": 82,
+ "mode": "mh at T_phot + DT",
+ "DT": -100.0,
+ "note": "mh_model(T_phot) - feh = sum coef*term(t=(T_phot-T0)/Tscale, M=feh); invert for feh",
+ "scatter": 0.09447161714696668,
+ "median_offset": -0.00357146859063099,
+ "scatter_old_kappa1": 0.0779
+}
