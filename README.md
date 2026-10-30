@@ -64,6 +64,14 @@ Calibration and catalogue:
 `catalog/cb_feh_v0.csv`: 9,525 ASAS-SN contact binaries, 7,111 with a calibrated [Fe/H] (`feh_all`), fitted with the standard
 fill-out (2026-10-29).
 
+## SPICE surfaces
+
+`spice_backend.py` takes SPICE surface models (PHOEBE contact meshes or SPICE's own meshes, with spots and abundance spots) and
+integrates them with the rochespec kernel method: each visible element's projected area is spread onto the ([M/H], Teff, log g,
+mu) grid nodes and velocity bins, and the spectrum is a sum of FFT products over the occupied nodes. With the same intensity grid
+it reproduces SPICE's `simulate_observed_flux` to 1e-8 in F/Fc and is 150-400 times faster per spectrum on a CPU.
+`jax_kernel.py` is the same integrator in JAX (jit, gradients through SPICE meshes). Install with `pip install -e .[spice]`.
+
 ## Layout
 
 - `roche.py`: Roche mesh, surface gravity and temperature, visibility and velocities, intensity grids and disk integration
@@ -74,5 +82,6 @@ fill-out (2026-10-29).
 - `wingrid.py`, `surveys/`: windowed FFT engine and the MRS, GALAH and DESI modules
 - `calib_lrs.py`, `calib_apogee.py`, `calib_fit.py`, `apo_tphot.py`, `post.py`: calibration and zero points
 - `catalog.py`: the combined catalogue
+- `spice_backend.py`, `jax_kernel.py`: SPICE surface models with the kernel integrator (NumPy and JAX)
 - `fine_joint.py`: optional cubic-spline interpolation of the chi^2 grid in Teff (`CB_FINE=1`)
 - `tools/`: payne-zero intensity grid generation (needs a payne-zero checkout, `PZ_ROOT`)
