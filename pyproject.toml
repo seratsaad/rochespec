@@ -8,6 +8,7 @@ version = "0.1.0"
 description = "Roche-model metallicities for contact binaries from large spectroscopic surveys"
 authors = [{ name = "Serat M. Saad" }]
 requires-python = ">=3.10"
+license = { text = "MIT" }
 dependencies = ["numpy", "scipy", "pandas", "astropy", "requests", "matplotlib"]
 
 [tool.setuptools.packages.find]
