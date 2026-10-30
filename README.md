@@ -11,9 +11,9 @@ put the result on the [Fe/H] scale of The Payne (SDSS DR19) for LAMOST LRS and M
 
 ## Install
 
-    pip install rochespec                # core: numpy, scipy, astropy
-    pip install "rochespec[phoebe]"      # PHOEBE contact meshes (the default surface model)
-    pip install "rochespec[all]"         # also SPICE/JAX, matplotlib and the batch-pipeline dependencies
+    pip install "rochespec @ git+https://github.com/seratsaad/rochespec"           # core: numpy, scipy, astropy
+    pip install "rochespec[phoebe] @ git+https://github.com/seratsaad/rochespec"   # PHOEBE contact meshes (the default surface model)
+    pip install "rochespec[all] @ git+https://github.com/seratsaad/rochespec"      # also SPICE/JAX, matplotlib and the batch-pipeline dependencies
 
 Without PHOEBE, rochespec uses its own ray-traced Roche surface and says so in a warning; [Fe/H] then differs by about 0.002 dex.
 

@@ -1,8 +1,9 @@
-__pycache__/
-*.pyc
 *.egg-info/
-.build_from_scratch.py
-logs/
 *.npz
-examples/*.png
+*.pyc
+.build_from_scratch.py
 .pytest_cache/
+__pycache__/
+build/
+examples/*.png
+logs/
